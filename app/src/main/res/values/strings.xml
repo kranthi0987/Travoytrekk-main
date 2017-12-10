@@ -1,0 +1,18 @@
+<resources>
+    <string name="app_name">Travoytrekk</string>
+    <string name="title_activity_dashboard">Dashboard</string>
+
+    <string name="navigation_drawer_open">Open navigation drawer</string>
+    <string name="navigation_drawer_close">Close navigation drawer</string>
+
+    <string name="action_settings">Settings</string>
+    <string name="title_activity_main">MainActivity</string>
+    <string name="title_activity_rainbow_plan">Rainbow_plan</string>
+    <string name="title_activity_pre_launch_offer">Pre_launch_offer</string>
+    <string name="contact_help"><![CDATA[Contact & Help]]></string>
+    <string name="about_us">About us</string>
+    <string name="home">Home</string>
+    <string name="offers">Offers</string>
+    <string name="rainbow_plan">Rainbow plan</string>
+    <string name="gallery">Gallery</string>
+</resources>
