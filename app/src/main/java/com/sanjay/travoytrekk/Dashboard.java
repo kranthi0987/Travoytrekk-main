@@ -1,11 +1,11 @@
 package com.sanjay.travoytrekk;
 
 import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
-import android.support.design.widget.Snackbar;
-import android.view.View;
 import android.support.design.widget.NavigationView;
+import android.support.design.widget.Snackbar;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
@@ -13,20 +13,30 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
 import android.widget.ImageButton;
+import android.widget.ImageView;
 
 public class Dashboard extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
 
     ImageButton home,gallery,offers,rainbowplans;
+    ImageView facebook, whatsapp;
+
+    public void openWhatsappContact(String number) {
+        Uri uri = Uri.parse("smsto:" + number);
+        Intent i = new Intent(Intent.ACTION_SENDTO, uri);
+        i.setPackage("com.whatsapp");
+        startActivity(Intent.createChooser(i, ""));
+    }
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_dashboard);
-        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
+        Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
-        FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
+        FloatingActionButton fab = findViewById(R.id.fab);
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -35,15 +45,15 @@ public class Dashboard extends AppCompatActivity
             }
         });
 
-        DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
+        DrawerLayout drawer = findViewById(R.id.drawer_layout);
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
                 this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
         drawer.addDrawerListener(toggle);
         toggle.syncState();
 
-        NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
+        NavigationView navigationView = findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
-        ImageButton home=(ImageButton) findViewById(R.id.imageButton);
+        ImageButton home = findViewById(R.id.imageButton);
         home.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -51,7 +61,7 @@ public class Dashboard extends AppCompatActivity
                 startActivity(i);
             }
         });
-        ImageButton gallery=(ImageButton) findViewById(R.id.imageButton2);
+        ImageButton gallery = findViewById(R.id.imageButton2);
         gallery.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -59,11 +69,32 @@ public class Dashboard extends AppCompatActivity
                 startActivity(i);
             }
         });
+        ImageView facebook = findViewById(R.id.facebook_button);
+        facebook.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent;
+                try {
+                    intent = new Intent(Intent.ACTION_VIEW, Uri.parse("fb://page/" + "1609098012470183"));
+                    startActivity(intent);
+                } catch (Exception e) {
+                    intent = new Intent(Intent.ACTION_VIEW, Uri.parse("https://www.facebook.com/" + "1609098012470183"));
+                    startActivity(intent);
+                }
+            }
+        });
+        ImageView whatsapp = findViewById(R.id.whatsapp_button);
+        whatsapp.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                openWhatsappContact("9989015918");
+            }
+        });
     }
 
     @Override
     public void onBackPressed() {
-        DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
+        DrawerLayout drawer = findViewById(R.id.drawer_layout);
         if (drawer.isDrawerOpen(GravityCompat.START)) {
             drawer.closeDrawer(GravityCompat.START);
         } else {
@@ -125,7 +156,7 @@ public class Dashboard extends AppCompatActivity
 
         }
 
-        DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
+        DrawerLayout drawer = findViewById(R.id.drawer_layout);
         drawer.closeDrawer(GravityCompat.START);
         return true;
     }
