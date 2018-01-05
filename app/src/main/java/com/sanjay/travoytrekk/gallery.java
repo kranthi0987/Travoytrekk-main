@@ -1,9 +1,11 @@
 package com.sanjay.travoytrekk;
 
 import android.content.Intent;
-import android.net.Uri;
+import android.graphics.Bitmap;
 import android.os.Bundle;
+import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.NavigationView;
+import android.support.design.widget.Snackbar;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
@@ -12,28 +14,31 @@ import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.ImageButton;
-import android.widget.ImageView;
+import android.webkit.WebView;
+import android.webkit.WebViewClient;
 
-public class Dashboard extends AppCompatActivity
+import com.pnikosis.materialishprogress.ProgressWheel;
+
+public class gallery extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
+    ProgressWheel progressBar;
+    private WebView wv1;
 
-    ImageButton home,gallery,offers,rainbowplans;
-    ImageView facebook, whatsapp;
-
-    public void openWhatsappContact(String number) {
-        Uri uri = Uri.parse("smsto:" + number);
-        Intent i = new Intent(Intent.ACTION_SENDTO, uri);
-        i.setPackage("com.whatsapp");
-        startActivity(Intent.createChooser(i, ""));
-    }
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_dashboard);
+        setContentView(R.layout.activity_gallery);
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
+        FloatingActionButton fab = findViewById(R.id.fab);
+        fab.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
+                        .setAction("Action", null).show();
+            }
+        });
 
         DrawerLayout drawer = findViewById(R.id.drawer_layout);
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
@@ -43,65 +48,11 @@ public class Dashboard extends AppCompatActivity
 
         NavigationView navigationView = findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
-        //
-        ImageButton home = findViewById(R.id.home);
-        home.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent i =new Intent(getApplicationContext(), MainActivity.class);
-                startActivity(i);
-            }
-        });
-        //
-        ImageButton gallery = findViewById(R.id.gallery);
-        gallery.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent i =new Intent(getApplicationContext(), Dashboard.class);
-                startActivity(i);
-            }
-        });
-        //
-        ImageButton offers = findViewById(R.id.shopping);
-        offers.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent i = new Intent(getApplicationContext(), Pre_launch_offer.class);
-                startActivity(i);
-            }
-        });
-        //
-        ImageButton rainbowplans = findViewById(R.id.rainbow);
-        rainbowplans.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent i = new Intent(getApplicationContext(), Rainbow_plan.class);
-                startActivity(i);
-            }
-        });
-        //
-        ImageView facebook = findViewById(R.id.facebook_button);
-        facebook.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent intent;
-                try {
-                    intent = new Intent(Intent.ACTION_VIEW, Uri.parse("fb://page/" + "1609098012470183"));
-                    startActivity(intent);
-                } catch (Exception e) {
-                    intent = new Intent(Intent.ACTION_VIEW, Uri.parse("https://www.facebook.com/" + "1609098012470183"));
-                    startActivity(intent);
-                }
-            }
-        });
-        //
-        ImageView whatsapp = findViewById(R.id.whatsapp_button);
-        whatsapp.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                openWhatsappContact("8331070437");
-            }
-        });
+        progressBar = findViewById(R.id.progressBar);
+        wv1 = findViewById(R.id.webview);
+        wv1.setWebViewClient(new gallery.myWebClient());
+        wv1.getSettings().setJavaScriptEnabled(true);
+        wv1.loadUrl("http://www.travoytrekk.com/gallery.php");
     }
 
     @Override
@@ -171,5 +122,30 @@ public class Dashboard extends AppCompatActivity
         DrawerLayout drawer = findViewById(R.id.drawer_layout);
         drawer.closeDrawer(GravityCompat.START);
         return true;
+    }
+
+    public class myWebClient extends WebViewClient {
+        @Override
+        public void onPageStarted(WebView view, String url, Bitmap favicon) {
+            // TODO Auto-generated method stub
+            super.onPageStarted(view, url, favicon);
+        }
+
+        @Override
+        public boolean shouldOverrideUrlLoading(WebView view, String url) {
+            // TODO Auto-generated method stub
+            progressBar.setVisibility(View.VISIBLE);
+            view.loadUrl(url);
+            return true;
+
+        }
+
+        @Override
+        public void onPageFinished(WebView view, String url) {
+            // TODO Auto-generated method stub
+            super.onPageFinished(view, url);
+
+            progressBar.setVisibility(View.GONE);
+        }
     }
 }
